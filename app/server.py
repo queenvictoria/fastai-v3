@@ -12,16 +12,18 @@ from starlette.staticfiles import StaticFiles
 export_file_url = 'https://drive.google.com/uc?export=download&id=1XQVL7m5q_XRMRkBXb4L7gVnHG8_tF7mT'
 export_file_name = 'export-whales.pkl'
 
-classes = ['blue', 'humpback', 'southernright']
+classes = ['Blue', 'Humpback', 'Southern right']
 path = Path(__file__).parent
 
 app = Starlette()
-app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_headers=['X-Requested-With', 'Content-Type'])
+app.add_middleware(CORSMiddleware, allow_origins=[
+                   '*'], allow_headers=['X-Requested-With', 'Content-Type'])
 app.mount('/static', StaticFiles(directory='app/static'))
 
 
 async def download_file(url, dest):
-    if dest.exists(): return
+    if dest.exists():
+        return
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as response:
             data = await response.read()
@@ -58,10 +60,13 @@ async def homepage(request):
 @app.route('/analyze', methods=['POST'])
 async def analyze(request):
     img_data = await request.form()
-    img_bytes = await (img_data['file'].read())
+    img_bytes = await(img_data['file'].read())
     img = open_image(BytesIO(img_bytes))
-    prediction = learn.predict(img)[0]
-    return JSONResponse({'result': str(prediction)})
+
+    prediction = learn.predict(img)
+    probabilities = dict(zip(classes, (float(x) for x in prediction[2])))
+
+    return JSONResponse({'result': str(prediction[0]), 'probability': float(prediction[2].max())})
 
 
 if __name__ == '__main__':
