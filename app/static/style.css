@@ -1,5 +1,82 @@
 body {
-  background-color: #fff;
+  -webkit-font-smoothing: antialiased;
+}
+
+background {
+  /*background-color: #fff;x*/
+  z-index: 0;
+  position: absolute;
+  top: 0;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  border-radius: 4%;
+}
+
+background img {
+  filter: blur(8px);
+  -webkit-filter: blur(8px);
+  margin-left: -2vh;
+  margin-top: -20vh;
+  height: 120vh;
+  width: auto;
+  animation-name: reveal;
+  animation-duration: 40s;
+  animation-iteration-count: infinite;
+}
+
+@media only screen and (min-width: 600px) {
+  background {
+    margin: 2vh;
+    height: 96vh;
+    left: -25vw;
+    margin-left: 50vw;
+    width: 50vw;
+  }
+
+  background img {
+    height: auto;
+    width: 60vw;
+    margin-top: -30vh;
+  }
+}
+
+/* Standard syntax */
+@keyframes reveal {
+  0% {
+    -webkit-filter: blur(8px);
+  }
+
+  50% {
+    -webkit-filter: blur(0px);
+  }
+
+  100% {
+    -webkit-filter: blur(8px);
+  }
+}
+
+main,
+header {
+  /*opacity: 0.95;*/
+  position: relative;
+  z-index: 1;
+}
+
+footer {
+  opacity: 0.8;
+}
+
+header {
+  height: 32vh;
+}
+
+h4 {
+  opacity: 0.8;
+}
+
+main {
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
 }
 
 .card .card-image img.no-display,
